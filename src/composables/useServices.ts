@@ -10,13 +10,17 @@ export default function useServices(): any {
   const loading = ref<any>(false)
   const error = ref<any>(false)
 
-  const getServices = async (): Promise<any> => {
+  const getServices = async (searchText?:string): Promise<any> => {
     try {
       // Initialize loading state
       loading.value = true
 
       // Fetch data from the API
-      const { data } = await axios.get('/api/services')
+      let url = '/api/services'
+      if (searchText) {
+        url = `/api/services?q=${searchText}`
+      }
+      const { data } = await axios.get(url)
 
       // Store data in Vue ref
       services.value = data
@@ -38,5 +42,6 @@ export default function useServices(): any {
     services,
     loading,
     error,
+    getServices,
   }
 }
